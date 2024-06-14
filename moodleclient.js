@@ -38,7 +38,7 @@ module.exports = {
                 });
                 
             } else {
-                throw new Error(bbclib.s('serviceerror'));
+                throw new Error();
             }
             
         }).on('error', (e) => {
