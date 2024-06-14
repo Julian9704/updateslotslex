@@ -1,11 +1,15 @@
-const mclient = require('./moodleclient.mjs');
+const mclient = require('./moodleclient.js');
 
 // Starting AWS clients.
+const AWS = require('aws-sdk');
 const pStore = new AWS.SSM();
+AWS.config.update({
+    region: 'us-east-1'
+});
 
-export const handler = async (event) => {
+exports.handler = async (event) => {
     var paramsParametersStore = {
-        Path: '/secrets-chatia/' + currentClient + '/',
+        Path: '/secrets-chatia/fyco/',
         Recursive: false,
         WithDecryption: true
     };
@@ -24,7 +28,7 @@ export const handler = async (event) => {
         }
     }
     var ctx = {
-        'api': {
+        "api": {
             "url": localParams.url,
             "token": localParams.token
         }
@@ -33,16 +37,10 @@ export const handler = async (event) => {
     /**
      * Request the server to get the courses avaibles.
      */
-    var courses;
+    var courses = await mclient.getCourses(ctx);
 
-    async () => {
 
-        try {
-            courses = await mclient.getCourses();
-        } catch (error) {
-            console.error(error);
-        }
-    };
+    
     // Determinate when a course is avaiable.
 
 
@@ -75,3 +73,15 @@ export const handler = async (event) => {
 
     return response;
 };
+
+
+(async () => {
+    try {
+        const result = await exports.handler({});
+        const objectJSONString = JSON.stringify(result, null, 2);
+        console.log(objectJSONString);
+        console.log(result.messages[0].content);
+    } catch (error) {
+        console.error('Error durante la depuración:', error);
+    }
+})();
