@@ -50,7 +50,7 @@ exports.handler = async () => {
     // Fill courseAvailable array with the courses availables.
     courses.forEach(element => {
 
-        if (!courseAvailable.some(course => course.fullname === element.fullname) && element.showactivitydates) {
+        if (!courseAvailable.some(course => course.fullname === element.fullname)) {
             courseAvailable.push(element);
         }
     });
