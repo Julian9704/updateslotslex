@@ -45,19 +45,19 @@ exports.handler = async () => {
     var courses = await mclient.getCourses(ctx);
 
     // Get the name of the courses in Moodle.
-    var courseAvaialable = [];
+    var courseAvailable = [];
 
     // Fill courseAvailable array with the courses availables.
     courses.forEach(element => {
 
-        if (!courseAvaialable.some(course => course.fullname === element.fullname)) {
-            courseAvaialable.push(element);
+        if (!courseAvailable.some(course => course.fullname === element.fullname) && element.showactivitydates) {
+            courseAvailable.push(element);
         }
     });
 
     // This list is to arrange the courses in the lex API format.
     var slotValues = [];
-    courseAvaialable.forEach(element => {
+    courseAvailable.forEach(element => {
         let slotName = {
             sampleValue: {
                 value: element.fullname
